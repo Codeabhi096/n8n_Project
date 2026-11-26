@@ -39,9 +39,11 @@ st.markdown("""
     }
 
     /* Background & Container Tweaks */
+    .stMainBlockContainer,
     .main .block-container {
-        max-width: 960px;
-        padding-top: 1.8rem;
+        max-width: 1040px;
+        margin: 0 auto;
+        padding-top: 1.5rem;
         padding-bottom: 5rem;
     }
 
@@ -112,11 +114,11 @@ st.markdown("""
         animation: pulseGlow 2s infinite ease-in-out;
     }
 
-    /* Feature Cards Grid */
+    /* Feature Cards Grid (3x2 desktop, 2x3 tablet, 1x6 mobile) */
     .capabilities-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-        gap: 12px;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
         margin: 1.2rem 0 1.8rem 0;
         animation: fadeInUp 1s ease-out;
     }
@@ -125,10 +127,12 @@ st.markdown("""
         background: linear-gradient(135deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.8) 100%);
         border: 1px solid rgba(255, 255, 255, 0.08);
         border-radius: 14px;
-        padding: 12px 16px;
+        padding: 14px 16px;
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         gap: 12px;
+        height: 100%;
+        box-sizing: border-box;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         backdrop-filter: blur(12px);
     }
@@ -190,17 +194,40 @@ st.markdown("""
         gap: 6px;
     }
 
-    /* Mobile Responsive Adjustments */
-    @media (max-width: 768px) {
-        .hero-title {
-            font-size: 1.9rem;
+    /* Tablet & Mobile Responsive Adjustments */
+    @media (max-width: 1024px) {
+        .capabilities-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
         }
+        [data-testid="stHorizontalBlock"] {
+            flex-wrap: wrap !important;
+            gap: 8px !important;
+        }
+        [data-testid="stHorizontalBlock"] > [data-testid="stColumn"] {
+            flex: 1 1 calc(50% - 8px) !important;
+            min-width: calc(50% - 8px) !important;
+        }
+    }
+
+    @media (max-width: 640px) {
+        .hero-container {
+            padding: 0.75rem 0.25rem;
+        }
+        .hero-title {
+            font-size: 1.85rem;
+        }
+        .stMainBlockContainer,
         .main .block-container {
-            padding-left: 1rem;
-            padding-right: 1rem;
+            padding-left: 0.9rem;
+            padding-right: 0.9rem;
+            padding-top: 1rem;
         }
         .capabilities-grid {
             grid-template-columns: 1fr;
+        }
+        [data-testid="stHorizontalBlock"] > [data-testid="stColumn"] {
+            flex: 1 1 100% !important;
+            min-width: 100% !important;
         }
     }
 </style>
@@ -237,7 +264,7 @@ with st.sidebar:
             if unlock_clicked:
                 if not OWNER_ACCESS_CODE:
                     st.error("Owner mode is disabled (`OWNER_ACCESS_CODE` is not set).")
-                elif hmac.compare_digest(entered_code, OWNER_ACCESS_CODE):
+                elif hmac.compare_digest(entered_code.strip(), OWNER_ACCESS_CODE):
                     st.session_state.is_owner = True
                     st.rerun()
                 else:
