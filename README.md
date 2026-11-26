@@ -88,8 +88,8 @@ As configured in the n8n agentic workflow:
 - **📱 Fully Responsive Design**: Seamlessly adapts to smartphones, tablets, and desktop displays.
 - **✨ Animated Glassmorphic Cards**: Smooth hover states, glowing borders, and modern micro-animations.
 - **⚡ One-Click Quick Actions**: Pre-built interactive prompts (Schedule check, Email check, Expense logging, Task retrieval).
-- **🟢 Live Webhook Status**: Live connection indicator connecting directly to your published n8n workflow.
-- **⚙️ Configurable Webhook**: Easily swap between Test (`/webhook-test/`) and Production (`/webhook/`) endpoints right from the sidebar.
+- **🔐 Protected Webhook Access**: The n8n webhook is called only after the owner access code is provided.
+- **⚙️ Configurable Webhook**: Set the n8n endpoint through `.env` locally or Streamlit Secrets after deployment.
 - **🗑️ Chat Management**: Instant chat history wipe and real-time interaction metrics.
 
 ---
@@ -103,7 +103,7 @@ n8n_workflow/
 │   └── secrets.toml.example      # Sample secrets for Streamlit Cloud
 ├── screenshots/
 │   ├── n8n_workflow.jpg          # n8n workflow canvas screenshot
-│   └── streamlit_ui.png          # Streamlit UI screenshot placeholder
+│   └── streamlit_ui.jpg           # Streamlit UI screenshot
 ├── src/
 │   └── n8n_workflow/
 │       └── __init__.py
@@ -177,10 +177,10 @@ OWNER_ACCESS_CODE = "your-strong-passcode"
 
 ## 🔒 Security & Privacy Architecture
 
-Because this assistant connects to personal Google Workspace tools (Gmail, Calendar, Tasks, Docs, and Sheets), the app uses a **two-mode access model** so it can be safely showcased publicly:
+Because this assistant connects to personal Google Workspace tools (Gmail, Calendar, Tasks, Docs, and Sheets), access to the live agent is protected:
 
-- **🛡️ Public Demo Mode (Default)**: Visitors and recruiters can explore the full UI and test every tool category with realistic simulated responses—**without** calling the live n8n webhook or exposing personal emails, calendar events, or triggering real actions.
-- **🔓 Owner Mode (Passcode Protected)**: Entering the `OWNER_ACCESS_CODE` in the sidebar unlocks the live n8n webhook connection (stored strictly in `.env` or Streamlit Secrets, never hardcoded or displayed in the UI).
+- **🛡️ Public UI**: Visitors can view and explore the interface, but chat requests do not receive simulated responses and are not sent to n8n.
+- **🔓 Owner Access (Passcode Protected)**: Entering the `OWNER_ACCESS_CODE` in the sidebar unlocks chat requests to the configured n8n webhook. Keep the passcode and webhook URL in `.env` or Streamlit Secrets; never hardcode them or commit real values.
 
 ---
 
