@@ -1,6 +1,6 @@
 # 🤖 Autonomous Personal AI Assistant (n8n + Streamlit)
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://agenticai-28f4o89zzdnxz2nwwqqtd2.streamlit.app/)
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://codeabhi096-n8n-project-app-puwk8o.streamlit.app/)
 ![n8n Workflow](https://img.shields.io/badge/n8n-Agentic%20Workflow-FF6584?style=flat&logo=n8n&logoColor=white)
 ![OpenAI](https://img.shields.io/badge/OpenAI-Chat%20Model-412991?style=flat&logo=openai&logoColor=white)
 ![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=flat&logo=python&logoColor=white)
@@ -12,7 +12,7 @@ An autonomous multi-tool **Personal AI Assistant** powered by an **n8n Agentic W
 
 ## 🌐 Live Application
 Experience the live deployed application here:  
-👉 **[https://agenticai-28f4o89zzdnxz2nwwqqtd2.streamlit.app/](https://agenticai-28f4o89zzdnxz2nwwqqtd2.streamlit.app/)**
+👉 **[https://codeabhi096-n8n-project-app-puwk8o.streamlit.app/](https://codeabhi096-n8n-project-app-puwk8o.streamlit.app/)**
 
 ---
 
@@ -164,7 +164,7 @@ Open your browser at `http://localhost:8501`.
 ## ☁️ Streamlit Cloud Deployment
 
 This app is actively deployed at:  
-👉 **`https://agenticai-28f4o89zzdnxz2nwwqqtd2.streamlit.app/`**
+👉 **`https://codeabhi096-n8n-project-app-puwk8o.streamlit.app/`**
 
 ### Secrets Configuration on Streamlit Cloud:
 In **Settings > Secrets**:
@@ -198,4 +198,4 @@ Because this assistant connects to personal Google Workspace tools (Gmail, Calen
 ## 👨‍💻 Author
 **Abhishek Pathak**  
 - Email: `abhishek.pathak01111@gmail.com`  
-- Live Project: [agenticai-28f4o89zzdnxz2nwwqqtd2.streamlit.app](https://agenticai-28f4o89zzdnxz2nwwqqtd2.streamlit.app/)
+- Live Project: [codeabhi096-n8n-project-app-puwk8o.streamlit.app](https://codeabhi096-n8n-project-app-puwk8o.streamlit.app/)

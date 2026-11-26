@@ -240,35 +240,28 @@ if "is_owner" not in st.session_state:
 # Sidebar configuration
 with st.sidebar:
     st.markdown("### ⚙️ System Settings")
-    st.markdown("#### 🔐 Access Mode")
+    st.markdown("#### 🔑 Access Key")
 
     if st.session_state.is_owner:
-        st.success("🔓 **Owner Mode Active** (Live n8n Agent)")
-        if WEBHOOK_URL:
-            st.caption("Webhook: `Configured via secrets/env` ✅")
-        else:
-            st.warning("⚠️ `N8N_WEBHOOK_URL` is not configured.")
-        if st.button("🔒 Lock & Switch to Demo Mode", use_container_width=True):
+        st.success("✅ Assistant Unlocked")
+        if st.button("🔒 Lock Assistant", use_container_width=True):
             st.session_state.is_owner = False
             st.rerun()
     else:
-        st.info("🛡️ **Public Demo Mode** (Safe Simulated Responses)")
+        st.caption("If you want to use the agent, please enter the secret key below.")
         with st.form("owner_auth_form", clear_on_submit=True):
             entered_code = st.text_input(
-                "Owner Access Code",
+                "Secret Key",
                 type="password",
-                placeholder="Enter passcode for live agent...",
-                help="Protects personal Gmail, Calendar, Tasks, Docs, and Sheets from unauthorized public access."
+                placeholder="Enter secret key..."
             )
-            unlock_clicked = st.form_submit_button("🔓 Unlock Live Agent", use_container_width=True)
+            unlock_clicked = st.form_submit_button("🔓 Unlock", use_container_width=True)
             if unlock_clicked:
-                if not OWNER_ACCESS_CODE:
-                    st.error("Owner mode is disabled (`OWNER_ACCESS_CODE` is not set).")
-                elif hmac.compare_digest(entered_code.strip(), OWNER_ACCESS_CODE):
+                if OWNER_ACCESS_CODE and hmac.compare_digest(entered_code.strip(), OWNER_ACCESS_CODE):
                     st.session_state.is_owner = True
                     st.rerun()
                 else:
-                    st.error("Invalid access code. Staying in Public Demo Mode.")
+                    st.error("Incorrect secret key. Please try again.")
     
     st.markdown("---")
     st.markdown("### 🛠️ Connected Tools & APIs")
@@ -292,15 +285,14 @@ with st.sidebar:
         st.rerun()
         
     st.markdown("---")
-    st.caption("🚀 **Live App**: [Streamlit Cloud](https://agenticai-28f4o89zzdnxz2nwwqqtd2.streamlit.app/)")
+    st.caption("🚀 **Live App**: [Streamlit Cloud](https://codeabhi096-n8n-project-app-puwk8o.streamlit.app/)")
 
 # Hero Header with Live Pulse Badge
-mode_badge = "Live n8n Multi-Agent Online (Owner Mode)" if st.session_state.is_owner else "Public Demo Mode · Personal Tools Protected"
-st.markdown(f"""
+st.markdown("""
 <div class="hero-container">
     <div class="hero-badge">
         <span class="pulse-dot"></span>
-        <span>{mode_badge}</span>
+        <span>n8n Multi-Agent Workflow Online</span>
     </div>
     <div class="hero-title">Personal AI Assistant</div>
     <p style="color: #94A3B8; font-size: 0.95rem; margin-top: 0;">
@@ -308,13 +300,6 @@ st.markdown(f"""
     </p>
 </div>
 """, unsafe_allow_html=True)
-
-if not st.session_state.is_owner:
-    st.info(
-        "🛡️ **Recruiter / Public Demo Mode:** Responses are simulated so visitors can safely explore the workflow "
-        "without accessing private Gmail, Calendar, Tasks, Docs, or Expense data. "
-        "The owner can unlock the live n8n agent from the sidebar."
-    )
 
 # Subheader: What can your personal assistant do?
 st.markdown('<div class="section-title"><span>⚡</span> What can your personal assistant do?</div>', unsafe_allow_html=True)
@@ -398,58 +383,6 @@ for message in st.session_state.messages:
     with st.chat_message(message["role"], avatar=avatar):
         st.markdown(message["content"])
 
-def generate_demo_response(user_input: str) -> str:
-    """Return a safe, realistic simulated response for public demo visitors."""
-    q = user_input.lower()
-    footer = "\n\n---\n*🛡️ Simulated Demo Response — Live personal tools (Gmail, Calendar, Tasks, Docs, Sheets) are locked in Public Demo Mode.*"
-
-    if any(k in q for k in ("calendar", "schedule", "meeting", "event", "today")):
-        return (
-            "📅 **Sample Calendar Summary (Demo Data)**\n\n"
-            "- **10:00 AM – 10:30 AM**: Architecture Sync *(Google Meet)*\n"
-            "- **02:00 PM – 03:00 PM**: n8n Workflow Review\n"
-            "- **05:00 PM – 05:30 PM**: Sprint Wrap-up\n\n"
-            "*(Tool simulated: Google Calendar — Get Many Events)*" + footer
-        )
-    if any(k in q for k in ("email", "gmail", "unread", "inbox", "mail", "send")):
-        return (
-            "✉️ **Sample Gmail Summary (Demo Data)**\n\n"
-            "- **Project Update**: Weekly deployment checklist is ready for review.\n"
-            "- **Newsletter**: Latest AI agent orchestration patterns.\n\n"
-            "*(Outbound email sending & real inbox reads are disabled in Public Demo Mode)*" + footer
-        )
-    if any(k in q for k in ("expense", "coffee", "inr", "sheet", "budget", "spend", "rupee", "₹")):
-        return (
-            "💰 **Sample Expense Log (Demo Data)**\n\n"
-            "- **Category**: Food & Beverage\n"
-            "- **Item**: Coffee\n"
-            "- **Amount**: ₹350 INR\n"
-            "- **Status**: Simulated append to Google Sheets Expense Tracker" + footer
-        )
-    if any(k in q for k in ("task", "todo", "to-do", "checklist")):
-        return (
-            "📋 **Sample Pending Tasks (Demo Data)**\n\n"
-            "1. Finalize README documentation\n"
-            "2. Review n8n agent prompt guardrails\n"
-            "3. Prepare live walkthrough for recruiters\n\n"
-            "*(Tool simulated: Google Tasks — Get Many Tasks)*" + footer
-        )
-    if any(k in q for k in ("doc", "note", "report")):
-        return (
-            "📄 **Sample Google Docs Action (Demo Data)**\n\n"
-            "Drafted structured notes under **\"Agentic AI Roadmap\"** with key milestones.\n\n"
-            "*(Tool simulated: Google Docs — Create/Update Document)*" + footer
-        )
-    return (
-        "🤖 **n8n Multi-Agent Workflow (Demo Simulation)**\n\n"
-        f"Received your prompt: *\"{user_input}\"*\n\n"
-        "In **Owner Mode**, the n8n AI Agent routes this through OpenAI + Window Memory and selects from "
-        "SerpApi Search, Google Calendar, Gmail, Google Tasks, Google Docs, or Google Sheets.\n\n"
-        "Try one of the quick-action buttons above (Calendar, Emails, Expense, or Tasks) to preview each tool's output!"
-        + footer
-    )
-
-
 # Function to execute assistant response
 def handle_assistant_interaction(user_input: str):
     # Display user message in chat message container
@@ -458,12 +391,15 @@ def handle_assistant_interaction(user_input: str):
     # Add user message to chat history
     st.session_state.messages.append({"role": "user", "content": user_input})
 
-    # Call n8n webhook (Owner Mode) or return safe simulated output (Demo Mode)
+    # Require secret key before forwarding to n8n webhook
     with st.chat_message("assistant", avatar="🤖"):
         if not st.session_state.is_owner:
-            assistant_response = generate_demo_response(user_input)
-            st.markdown(assistant_response)
-            st.session_state.messages.append({"role": "assistant", "content": assistant_response})
+            polite_msg = (
+                "👋 Welcome! To use this Personal AI Assistant and run tasks with the connected tools, "
+                "please open the sidebar (top-left) and enter the **Secret Key** first."
+            )
+            st.markdown(polite_msg)
+            st.session_state.messages.append({"role": "assistant", "content": polite_msg})
             return
 
         if not WEBHOOK_URL:
